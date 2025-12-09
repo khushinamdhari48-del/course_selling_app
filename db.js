@@ -1,8 +1,5 @@
 const { Schema, default: mongoose } = require("mongoose");
 console.log("connected to");
-mongoose.connect(
-  "mongodb+srv://khushi_db_user:fFclFSdzsTunD5YL@cluster0.v4veafz.mongodb.net/cousera-app"
-);
 
 const userSchema = new Schema({
   email: { type: String, required: true },
