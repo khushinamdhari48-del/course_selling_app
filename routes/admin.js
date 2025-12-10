@@ -1,8 +1,10 @@
 const { Router } = require("express");
 const adminRouter = Router();
-const { adminModel } = require("../db");
+const { adminModel, courseModel } = require("../db");
 const jwt = require("jsonwebtoken");
-const JWT_ADMIN_PASSWORD = "192738392hdk";
+JWT_ADMIN_PASSWORD = "192738392hdk";
+//const { JWT_ADMIN_PASSWORD } = require("../config");
+const { adminMiddleware } = require("../middleware/admin");
 adminRouter.post("/signup", async function (req, res) {
   //bcrpyt //zod
   const { email, password, firstName, lastName } = req.body;
@@ -39,19 +41,50 @@ adminRouter.post("/signin", async function (req, res) {
 adminRouter.get("/purchases", function (req, res) {
   res.json({ message: "Fetched user purchases successfully" });
 });
-adminRouter.post("/", function (req, res) {
+adminRouter.post("/course", adminMiddleware, async function (req, res) {
+  const adminId = req.userId;
+  const { title, description, imageUrl, price } = req.body;
+  const course = await courseModel.create({
+    title: title,
+    description: description,
+    imageUrl: imageUrl,
+    price: price,
+    creatorId: adminId,
+  });
+
   res.json({
     message: "cousrse added",
   });
 });
-adminRouter.put("/", function (req, res) {
+adminRouter.put("/course/update", async function (req, res) {
+  const adminId = req.userId;
+  const { title, description, imageUrl, price, courseId } = req.body;
+  const course = await courseModel.updateOne(
+    {
+      _id: courseId,
+      craetorId: adminId,
+    },
+    {
+      title: title,
+      description: description,
+      imageUrl: imageUrl,
+      price: price,
+      creatorId: adminId,
+    }
+  );
+
   res.json({
-    message: "cousrse added",
+    message: "cousrse updated",
   });
 });
-adminRouter.get("/bulk", function (req, res) {
+adminRouter.get("course/bulk", async function (req, res) {
+  const adminId = req.userId;
+  const courses = await courseModel.find({
+    creatorId: adminId,
+  });
   res.json({
     message: "cousrse added",
+    courses,
   });
 });
 module.exports = adminRouter;
