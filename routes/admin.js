@@ -54,6 +54,7 @@ adminRouter.post("/course", adminMiddleware, async function (req, res) {
 
   res.json({
     message: "cousrse added",
+    courseId: course,
   });
 });
 adminRouter.put("/course/update", async function (req, res) {
@@ -75,6 +76,7 @@ adminRouter.put("/course/update", async function (req, res) {
 
   res.json({
     message: "cousrse updated",
+    courseId: courseId,
   });
 });
 adminRouter.get("course/bulk", async function (req, res) {
