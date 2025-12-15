@@ -15,6 +15,6 @@ async function main() {
     "mongodb+srv://khushi_db_user:fFclFSdzsTunD5YL@cluster0.v4veafz.mongodb.net/cousera-app"
   );
   app.listen(3003);
-  console.log("listening on port 3003");
+  console.log("listening on port 3006");
 }
 main();

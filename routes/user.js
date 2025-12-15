@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { userModel } = require("../db");
+const { userModel, purchaseModel } = require("../db");
 
 const userRouter = Router();
 const jwt = require("jsonwebtoken");
@@ -37,8 +37,13 @@ userRouter.post("/signin", async function (req, res) {
   }
 });
 
-userRouter.get("/purchases", function (req, res) {
-  res.json({ message: "Fetched user purchases successfully" });
+userRouter.get("/purchases", async function (req, res) {
+  const userId = req.userId;
+  const purchased = await purchaseModel.findOne({
+    userId,
+    courses,
+  });
+  res.json({ message: "Fetched user purchases successfully", purchased });
 });
 
 module.exports = userRouter;
