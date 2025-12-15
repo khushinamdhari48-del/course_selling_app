@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { userModel, purchaseModel } = require("../db");
-const { courses } = require("../db");
+const { courseModel } = require("../db");
 const userRouter = Router();
 const jwt = require("jsonwebtoken");
 const { JWT_USER_PASSWORD } = require("../config");
@@ -40,10 +40,15 @@ userRouter.post("/signin", async function (req, res) {
 userRouter.get("/purchases", async function (req, res) {
   const userId = req.userId;
   const purchased = await purchaseModel.findOne({
-    userId,
-    courses,
+    userId: userId,
   });
-  res.json({ message: "Fetched user purchases successfully", purchased });
+  const coursesData = await courseModel.findOne({
+    _id: { $in: purchased.modifiedPaths((x) => x.courseId) },
+  });
+  res.json({
+    purchased,
+    coursesData,
+  });
 });
 
 module.exports = userRouter;
