@@ -4,6 +4,7 @@ const userRouter = require("./routes/user.js");
 const courseRouter = require("./routes/course.js");
 const adminRouter = require("./routes/admin.js");
 const app = express();
+//added to parse json data
 
 app.use(express.json());
 
